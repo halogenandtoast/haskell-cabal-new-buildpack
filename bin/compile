@@ -15,15 +15,20 @@ export PATH=$WORKING_HOME/vendor/ghc-$GHC_VER/bin:$WORKING_HOME/vendor/cabal-ins
 mkdir -p $WORKING_HOME/vendor
 mkdir -p $CACHE_DIR/download
 
-if [ ! -e $CACHE_DIR/download/ghc-$GHC_VER ]; then
-  echo "------> Downloading GHC $GHC_VER"
-  curl -# -L https://downloads.haskell.org/~ghc/$GHC_VER/ghc-$GHC_VER-x86_64-deb8-linux.tar.xz | tar x -J -C $CACHE_DIR/download
-fi
+if [ ! -e $CACHE_DIR/ghc-$GHC_VER ]; then
+  if [ ! -e $CACHE_DIR/download/ghc-$GHC_VER ]; then
+    echo "------> Downloading GHC $GHC_VER"
+    curl -# -L https://downloads.haskell.org/~ghc/$GHC_VER/ghc-$GHC_VER-x86_64-deb8-linux.tar.xz | tar x -J -C $CACHE_DIR/download
+  fi
 
-echo "------> Installing GHC $GHC_VER"
-cd $CACHE_DIR/download/ghc-$GHC_VER
-./configure --prefix $WORKING_HOME/vendor/ghc-$GHC_VER
-make install
+  echo "------> Installing GHC $GHC_VER"
+  cd $CACHE_DIR/download/ghc-$GHC_VER
+  ./configure --prefix $WORKING_HOME/vendor/ghc-$GHC_VER
+  make install
+
+  echo "-----> Caching GHC $GHC_VER binaries"
+  cp -R $WORKING_HOME/vendor/ghc-$GHC_VER $CACHE_DIR
+fi
 
 if [ ! -e $CACHE_DIR/download/cabal-install-$CABAL_VER ]; then
   echo "------> Downloading cabal-install $CABAL_VER"
@@ -37,7 +42,7 @@ export PREFIX=$WORKING_HOME/vendor/cabal-install-$CABAL_VER
 export PREFIX=$WORKING_HOME/vendor/cabal-install-$CABAL_VER
 ./bootstrap.sh
 
-cd $WORKING_HOME
+cd $BUILD_HOME
 
 cabal new-update
 cabal new-build
