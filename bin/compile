@@ -12,7 +12,7 @@ GHC_VER=8.4.3
 CABAL_VER=2.2.0.0
 PROFILE_PATH="$BUILD_DIR/.profile.d/haskell.sh"
 
-export PATH=$BUILD_DIR/vendor/ghc-$GHC_VER/bin:$WORKING_HOME/vendor/cabal-install-$CABAL_VER/bin:$PATH
+export PATH=$BUILD_DIR/vendor/ghc-$GHC_VER/bin:$BUILD_DIR/vendor/cabal-install-$CABAL_VER/bin:$PATH
 
 echo "-----> Making build directories"
 
