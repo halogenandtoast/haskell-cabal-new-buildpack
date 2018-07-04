@@ -69,7 +69,7 @@ echo "-----> Building application"
 
 echo $(which ghc)
 cabal new-update
-cabal new-build --store-dir=$BUILD_DIR/vendor/store
+cabal new-build
 
 echo "-----> Setting env vars"
 
@@ -80,5 +80,5 @@ echo "export PATH=/app/vendor/ghc-$GHC_VER/bin:/app/vendor/cabal-install-$CABAL_
 echo "-----> Add default Procfile"
 
 cat << PROCFILE > Procfile
-web: cabal new-run --store-dir=/app/vendor/store
+web: cabal new-run
 PROCFILE
