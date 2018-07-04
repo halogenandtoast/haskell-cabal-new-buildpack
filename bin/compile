@@ -1,8 +1,22 @@
 #!/bin/sh
 
 set -e
-export GHC_VER=8.4.3
-curl -# -L "http://www.haskell.org/ghc/dist/$GHC_VER/ghc-$GHC_VER-x86_64-deb8-linux.tar.bz2" | bunzip2 | tar x -C $CACHE_DIR/download
+GHC_VER=8.4.3
+WORKING_HOME=/app
+
+mkdir -p $WORKING_HOME/vendor
+
+if [ ! -e $CACHE_DIR/download/ghc-$GHC_VER ]; then
+  echo "------> Downloading GHC $GHC_VER"
+  curl -# -L "http://www.haskell.org/ghc/dist/$GHC_VER/ghc-$GHC_VER-x86_64-deb8-linux.tar.bz2" | bunzip2 | tar x -C $CACHE_DIR/download
+fi
+
+echo "------> Installing GHC $GHC_VER"
+cd $CACHE_DIR/download/ghc-$GHC_VER
+./configure --prefix $WORKING_HOME/vendor/ghc-$GHC_VER
+make install
+
+cd $WORKING_HOME
 
 cabal new-update
 cabal new-build
