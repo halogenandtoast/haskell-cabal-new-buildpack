@@ -10,6 +10,8 @@ GHC_VER=8.4.3
 CABAL_VER=2.2.0.0
 WORKING_HOME=/app
 
+export PATH=$WORKING_HOME/vendor/ghc-$GHC_VER/bin:$WORKING_HOME/vendor/cabal-install-$CABAL_VER/bin:$PATH
+
 mkdir -p $WORKING_HOME/vendor
 mkdir -p $CACHE_DIR/download
 
