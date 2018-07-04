@@ -10,14 +10,13 @@ ENV_DIR="$3"
 
 GHC_VER=8.4.3
 CABAL_VER=2.2.0.0
-WORKING_HOME=/app
 PROFILE_PATH="$BUILD_DIR/.profile.d/haskell.sh"
 
-export PATH=$WORKING_HOME/vendor/ghc-$GHC_VER/bin:$WORKING_HOME/vendor/cabal-install-$CABAL_VER/bin:$PATH
+export PATH=$BUILD_DIR/vendor/ghc-$GHC_VER/bin:$WORKING_HOME/vendor/cabal-install-$CABAL_VER/bin:$PATH
 
 echo "-----> Making build directories"
 
-mkdir -p $WORKING_HOME/vendor
+mkdir -p $BUILD_DIR/vendor
 mkdir -p $CACHE_DIR/download
 mkdir -p $(dirname $PROFILE_PATH)
 
@@ -31,15 +30,15 @@ if [ ! -e $CACHE_DIR/ghc-$GHC_VER ]; then
 
   echo "------> Installing GHC $GHC_VER"
   cd $CACHE_DIR/download/ghc-$GHC_VER
-  ./configure --prefix $WORKING_HOME/vendor/ghc-$GHC_VER
+  ./configure --prefix $BUILD_DIR/vendor/ghc-$GHC_VER
   make install
 
   echo "-----> Caching GHC $GHC_VER binaries"
-  cp -R $WORKING_HOME/vendor/ghc-$GHC_VER $CACHE_DIR
+  cp -R $BUILD_DIR/vendor/ghc-$GHC_VER $CACHE_DIR
 else
   echo "-----> Restoring GHC $GHC_VER binaries"
-  rm -fr $WORKING_HOME/vendor/ghc-$GHC_VER
-  cp -R $CACHE_DIR/ghc-$GHC_VER $WORKING_HOME/vendor
+  rm -fr $BUILD_DIR/vendor/ghc-$GHC_VER
+  cp -R $CACHE_DIR/ghc-$GHC_VER $BUILD_DIR/vendor
 fi
 
 echo "-----> Setting up cabal-install"
@@ -52,14 +51,14 @@ if [ ! -e $CACHE_DIR/cabal-install-$CABAL_VER ]; then
 
   echo "------> Installing cabal-install $CABAL_VER"
   cd $CACHE_DIR/download/cabal-install-$CABAL_VER
-  export PREFIX=$WORKING_HOME/vendor/cabal-install-$CABAL_VER
+  export PREFIX=$BUILD_DIR/vendor/cabal-install-$CABAL_VER
   ./bootstrap.sh
 
   echo "-----> Caching cabal-install $CABAL_VER binaries"
-  cp -R $WORKING_HOME/vendor/cabal-install-$CABAL_VER $CACHE_DIR
+  cp -R $BUILD_DIR/vendor/cabal-install-$CABAL_VER $CACHE_DIR
 else
   echo "-----> Restoring cached cabal-install $CABAL_VER binaries"
-  cp -R $CACHE_DIR/cabal-install-$CABAL_VER $WORKING_HOME/vendor
+  cp -R $CACHE_DIR/cabal-install-$CABAL_VER $BUILD_DIR/vendor
 fi
 
 cd $BUILD_DIR
