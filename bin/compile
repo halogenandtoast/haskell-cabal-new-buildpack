@@ -10,6 +10,7 @@ GHC_VER=8.4.3
 WORKING_HOME=/app
 
 mkdir -p $WORKING_HOME/vendor
+mkdir -p $CACHE_DIR/download
 
 if [ ! -e $CACHE_DIR/download/ghc-$GHC_VER ]; then
   echo "------> Downloading GHC $GHC_VER"
