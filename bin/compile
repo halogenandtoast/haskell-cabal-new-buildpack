@@ -10,6 +10,7 @@ ENV_DIR="$3"
 
 GHC_VER=8.4.3
 CABAL_VER=2.2.0.0
+
 PROFILE_PATH="$BUILD_DIR/.profile.d/haskell.sh"
 
 export PATH=$BUILD_DIR/vendor/ghc-$GHC_VER/bin:$BUILD_DIR/vendor/cabal-install-$CABAL_VER/bin:$PATH
@@ -17,6 +18,7 @@ export PATH=$BUILD_DIR/vendor/ghc-$GHC_VER/bin:$BUILD_DIR/vendor/cabal-install-$
 echo "-----> Making build directories"
 
 mkdir -p $BUILD_DIR/vendor
+mkdir -p $BUILD_DIR/vendor/store
 mkdir -p $CACHE_DIR/download
 mkdir -p $(dirname $PROFILE_PATH)
 
@@ -65,8 +67,9 @@ cd $BUILD_DIR
 
 echo "-----> Building application"
 
-cabal new-update
-cabal new-build
+echo $(which ghc)
+cabal new-update --store-dir=$BUILD_DIR/vendor/store
+cabal new-build --store-dir=$BUILD_DIR/vendor/store
 
 echo "-----> Setting env vars"
 
@@ -77,5 +80,5 @@ echo "export PATH=/app/vendor/ghc-$GHC_VER/bin:/app/vendor/cabal-install-$CABAL_
 echo "-----> Add default Procfile"
 
 cat << PROCFILE > Procfile
-web: cabal new-run
+web: cabal new-run --store-dir=/app/vendor/store
 PROCFILE
