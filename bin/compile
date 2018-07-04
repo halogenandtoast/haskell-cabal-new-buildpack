@@ -9,11 +9,13 @@ ENV_DIR="$3"
 GHC_VER=8.4.3
 CABAL_VER=2.2.0.0
 WORKING_HOME=/app
+PROFILE_PATH="$BUILD_DIR/.profile.d/haskell.sh"
 
 export PATH=$WORKING_HOME/vendor/ghc-$GHC_VER/bin:$WORKING_HOME/vendor/cabal-install-$CABAL_VER/bin:$PATH
 
 mkdir -p $WORKING_HOME/vendor
 mkdir -p $CACHE_DIR/download
+mkdir -p $(dirname $PROFILE_PATH)
 
 if [ ! -e $CACHE_DIR/ghc-$GHC_VER ]; then
   if [ ! -e $CACHE_DIR/download/ghc-$GHC_VER ]; then
@@ -28,6 +30,10 @@ if [ ! -e $CACHE_DIR/ghc-$GHC_VER ]; then
 
   echo "-----> Caching GHC $GHC_VER binaries"
   cp -R $WORKING_HOME/vendor/ghc-$GHC_VER $CACHE_DIR
+else
+  echo "-----> Restoring GHC $GHC_VER binaries"
+  rm -fr $WORKING_HOME/vendor/ghc-$GHC_VER
+  cp -R $CACHE_DIR/ghc-$GHC_VER $WORKING_HOME/vendor
 fi
 
 if [ ! -e $CACHE_DIR/cabal-install-$CABAL_VER ]; then
@@ -43,12 +49,17 @@ if [ ! -e $CACHE_DIR/cabal-install-$CABAL_VER ]; then
 
   echo "-----> Caching cabal-install $CABAL_VER binaries"
   cp -R $WORKING_HOME/vendor/cabal-install-$CABAL_VER $CACHE_DIR
+else
+  echo "-----> Restoring cached cabal-install $CABAL_VER binaries"
+  cp -R $CACHE_DIR/cabal-install-$CABAL_VER $WORKING_HOME/vendor
 fi
 
 cd $BUILD_DIR
 
 cabal new-update
 cabal new-build
+
+echo "export PATH=$PATH" >> $PROFILE_PATH
 
 cat << PROCFILE > Procfile
 web: cabal run
