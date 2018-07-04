@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ -f $1/*.cabal ]; then
+  echo "Cabal file detected"
+  exit 0
+else
+  echo "ERROR: missing cabal file"
+  exit 1
+fi
+
