@@ -2,6 +2,10 @@
 
 set -e
 
+BUILD_DIR="$1"
+CACHE_DIR="$2"
+ENV_DIR="$3"
+
 GHC_VER=8.4.3
 WORKING_HOME=/app
 
