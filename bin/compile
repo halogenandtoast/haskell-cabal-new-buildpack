@@ -2,6 +2,8 @@
 
 set -e
 
+echo "-----> Setting build variables"
+
 BUILD_DIR="$1"
 CACHE_DIR="$2"
 ENV_DIR="$3"
@@ -13,9 +15,13 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/haskell.sh"
 
 export PATH=$WORKING_HOME/vendor/ghc-$GHC_VER/bin:$WORKING_HOME/vendor/cabal-install-$CABAL_VER/bin:$PATH
 
+echo "-----> Making build directories"
+
 mkdir -p $WORKING_HOME/vendor
 mkdir -p $CACHE_DIR/download
 mkdir -p $(dirname $PROFILE_PATH)
+
+echo "-----> Setting up GHC"
 
 if [ ! -e $CACHE_DIR/ghc-$GHC_VER ]; then
   if [ ! -e $CACHE_DIR/download/ghc-$GHC_VER ]; then
@@ -35,6 +41,8 @@ else
   rm -fr $WORKING_HOME/vendor/ghc-$GHC_VER
   cp -R $CACHE_DIR/ghc-$GHC_VER $WORKING_HOME/vendor
 fi
+
+echo "-----> Setting up cabal-install"
 
 if [ ! -e $CACHE_DIR/cabal-install-$CABAL_VER ]; then
   if [ ! -e $CACHE_DIR/download/cabal-install-$CABAL_VER ]; then
@@ -56,11 +64,17 @@ fi
 
 cd $BUILD_DIR
 
+echo "-----> Building application"
+
 cabal new-update
 cabal new-build
 
+echo "-----> Setting env vars"
+
 echo "export PATH=$PATH" >> $PROFILE_PATH
 
+echo "-----> Add default Procfile"
+
 cat << PROCFILE > Procfile
-web: cabal run
+web: cabal new-run
 PROCFILE
