@@ -13,7 +13,7 @@ WORKING_HOME=/app
 mkdir -p $WORKING_HOME/vendor
 mkdir -p $CACHE_DIR/download
 
-function install-haskell() {
+install_haskell() {
   if [ ! -e $CACHE_DIR/download/ghc-$GHC_VER ]; then
     echo "------> Downloading GHC $GHC_VER"
     curl -# -L https://downloads.haskell.org/~ghc/$GHC_VER/ghc-$GHC_VER-x86_64-deb8-linux.tar.xz | tar x -J -C $CACHE_DIR/download
@@ -25,8 +25,8 @@ function install-haskell() {
   make install
 }
 
-function install-cabal() {
-  if [ ! -e $CACHE_DIR/download/cabal-install-$CABAL_VER ]l then
+install_cabal() {
+  if [ ! -e $CACHE_DIR/download/cabal-install-$CABAL_VER ]; then
     echo "------> Downloading cabal-install $CABAL_VER"
     curl -# -L https://www.haskell.org/cabal/release/cabal-install-$CABAL_VER/cabal-install-$CABAL_VER.tar.gz | tar zx -C $CACHE_DIR/download
   fi
@@ -39,8 +39,8 @@ function install-cabal() {
   ./bootstrap.sh
 }
 
-install-haskell
-install-cabal
+install_haskell()
+install_cabal()
 
 cd $WORKING_HOME
 
