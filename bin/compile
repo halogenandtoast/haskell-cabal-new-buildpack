@@ -30,17 +30,20 @@ if [ ! -e $CACHE_DIR/ghc-$GHC_VER ]; then
   cp -R $WORKING_HOME/vendor/ghc-$GHC_VER $CACHE_DIR
 fi
 
-if [ ! -e $CACHE_DIR/download/cabal-install-$CABAL_VER ]; then
-  echo "------> Downloading cabal-install $CABAL_VER"
-  curl -# -L https://www.haskell.org/cabal/release/cabal-install-$CABAL_VER/cabal-install-$CABAL_VER.tar.gz | tar zx -C $CACHE_DIR/download
+if [ ! -e $CACHE_DIR/ghc-$GHC_VER ]; then
+  if [ ! -e $CACHE_DIR/download/cabal-install-$CABAL_VER ]; then
+    echo "------> Downloading cabal-install $CABAL_VER"
+    curl -# -L https://www.haskell.org/cabal/release/cabal-install-$CABAL_VER/cabal-install-$CABAL_VER.tar.gz | tar zx -C $CACHE_DIR/download
+  fi
+
+  echo "------> Installing cabal-install $CABAL_VER"
+  cd $CACHE_DIR/download/cabal-install-$CABAL_VER
+  export PREFIX=$WORKING_HOME/vendor/cabal-install-$CABAL_VER
+  ./bootstrap.sh
+
+  echo "-----> Caching cabal-install $CABAL_VER binaries"
+  cp -R $WORKING_HOME/vendor/cabal-install-$CABAL_VER $CACHE_DIR
 fi
-
-echo "------> Installing cabal-install $CABAL_VER"
-cd $CACHE_DIR/download/cabal-install-$CABAL_VER
-export PREFIX=$WORKING_HOME/vendor/cabal-install-$CABAL_VER
-
-export PREFIX=$WORKING_HOME/vendor/cabal-install-$CABAL_VER
-./bootstrap.sh
 
 cd $BUILD_HOME
 
