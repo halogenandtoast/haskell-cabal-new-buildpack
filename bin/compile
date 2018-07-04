@@ -68,7 +68,7 @@ cd $BUILD_DIR
 echo "-----> Building application"
 
 echo $(which ghc)
-cabal new-update --store-dir=$BUILD_DIR/vendor/store
+cabal new-update
 cabal new-build --store-dir=$BUILD_DIR/vendor/store
 
 echo "-----> Setting env vars"
