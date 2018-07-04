@@ -9,7 +9,7 @@ mkdir -p $WORKING_HOME/vendor
 
 if [ ! -e $CACHE_DIR/download/ghc-$GHC_VER ]; then
   echo "------> Downloading GHC $GHC_VER"
-  curl -# -L "https://downloads.haskell.org/~ghc/$GHC_VER/ghc-$GHC_VER-x86_64-deb8-linux.tar.xz" | tar x -C $CACHE_DIR/download
+  curl -# -L https://downloads.haskell.org/~ghc/$GHC_VER/ghc-$GHC_VER-x86_64-deb8-linux.tar.xz | tar x -C $CACHE_DIR/download
 fi
 
 echo "------> Installing GHC $GHC_VER"
