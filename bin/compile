@@ -1,9 +1,9 @@
 #!/bin/sh
 
 set -e
+export GHC_VER=8.4.3
+curl -# -L "http://www.haskell.org/ghc/dist/$GHC_VER/ghc-$GHC_VER-x86_64-deb8-linux.tar.bz2" | bunzip2 | tar x -C $CACHE_DIR/download
 
-apt-get update
-apt-get install haskell-platform
 cabal new-update
 cabal new-build
 
