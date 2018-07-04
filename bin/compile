@@ -45,7 +45,7 @@ if [ ! -e $CACHE_DIR/cabal-install-$CABAL_VER ]; then
   cp -R $WORKING_HOME/vendor/cabal-install-$CABAL_VER $CACHE_DIR
 fi
 
-cd $BUILD_HOME
+cd $BUILD_DIR
 
 cabal new-update
 cabal new-build
