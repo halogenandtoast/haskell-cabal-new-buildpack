@@ -68,6 +68,8 @@ cd $BUILD_DIR
 echo "-----> Building application"
 
 echo $(which ghc)
+echo $(ghc --version)
+
 cabal new-update
 cabal new-build
 
